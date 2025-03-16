@@ -42,11 +42,17 @@ class Speech():
             audio_file = 'sample.wav'
             display(Audio(data=audio, rate=24000, autoplay=i==0), display_id=False)
             sf.write(audio_file, audio, 24000) # save each audio file
-            if platform.system().lower() != "windows":
-                subprocess.call(["afplay", audio_file])
-            else:
+            if platform.system().lower() == "windows":
                 import winsound
                 winsound.PlaySound(audio_file, winsound.SND_FILENAME)
+            elif platform.system().lower() == "linux":
+                #for WSL we might want to use ffplay.exe (from windows) to play the audio to get better quality and latency
+                if "microsoft-standard-WSL2" in platform.uname().release:
+                    subprocess.call(["ffplay.exe", "-nodisp", "-autoexit", "-loglevel", "panic", audio_file])
+                else:
+                    subprocess.call(["aplay", audio_file])
+            else:
+                subprocess.call(["afplay", audio_file])
 
     def replace_url(self, url: re.Match) -> str:
         """

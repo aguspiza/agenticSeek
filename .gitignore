@@ -1,3 +1,6 @@
+# do not upload my config.ini file
+config.ini
+
 *.wav
 config.ini
 *.egg-info

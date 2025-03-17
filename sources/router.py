@@ -41,7 +41,9 @@ class AgentRouter:
         """
         first_sentence = None
         for line in text.split("\n"):
-                first_sentence = line.strip()
+            stripped_line = line.strip()
+            if stripped_line:
+                first_sentence = stripped_line
                 break
         if first_sentence is None:
             first_sentence = text
@@ -67,9 +69,9 @@ class AgentRouter:
 
 if __name__ == "__main__":
     agents = [
-        CoderAgent("deepseek-r1:14b", "agent1", "../prompts/coder_agent.txt", "server"),
-        CasualAgent("deepseek-r1:14b", "agent2", "../prompts/casual_agent.txt", "server"),
-        PlannerAgent("deepseek-r1:14b", "agent3", "../prompts/planner_agent.txt", "server")
+        CoderAgent("deepseek-r1:14b", "agent1", "prompts/coder_agent.txt", "ollama"),
+        CasualAgent("deepseek-r1:14b", "agent2", "prompts/casual_agent.txt", "ollama"),
+        PlannerAgent("deepseek-r1:14b", "agent3", "prompts/planner_agent.txt", "ollama")
     ]
     router = AgentRouter(agents)
     
@@ -77,10 +79,10 @@ if __name__ == "__main__":
     Write a python script to check if the device on my network is connected to the internet
     """,
     """
-    Hey could you search the web for the latest news on the stock market ?
+    Hey could you search the web for the latest news on the stock market?
     """,
     """
-    hey can you give give a list of the files in the current directory ?
+    hey can you give give a list of the files in the current directory?
     """,
     """
     Make a cool game to illustrate the current relation between USA and europe
@@ -89,8 +91,8 @@ if __name__ == "__main__":
 
     for text in texts:
         print(text)
-        results = router.classify_text(text)
-        for result in results:
-            print(result["label"], "=>", result["score"])
+        result = router.classify_text(text)
+        for result_idx in range(len(result["labels"])):
+            print(result["labels"][result_idx], "=>", result["scores"][result_idx])
         agent = router.select_agent(text)
         print("Selected agent role:", agent.role)

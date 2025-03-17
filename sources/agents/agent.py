@@ -109,7 +109,7 @@ class Agent():
         if speech_module is None:
             return
         messages = ["Please be patient, I am working on it.",
-                    "Computing... I recommand you have a coffee while I work.",
+                    "Computing... I recommend you have a coffee while I work.",
                     "Hold on, I’m crunching numbers.",
                     "Working on it, please let me think."]
         speech_module.speak(messages[random.randint(0, len(messages)-1)])

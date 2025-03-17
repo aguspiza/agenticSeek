@@ -11,12 +11,13 @@ class Interaction:
     def __init__(self, agents,
                  tts_enabled: bool = True,
                  stt_enabled: bool = True,
-                 recover_last_session: bool = False):
+                 recover_last_session: bool = False,
+                 language: str = "english"):
         self.tts_enabled = tts_enabled
         self.agents = agents
         self.current_agent = None
         self.router = AgentRouter(self.agents)
-        self.speech = Speech()
+        self.speech = Speech(language=language)
         self.is_active = True
         self.last_query = None
         self.last_answer = None
@@ -27,7 +28,10 @@ class Interaction:
             self.transcriber = AudioTranscriber(self.ai_name, verbose=False)
             self.recorder = AudioRecorder()
         if tts_enabled:
-            self.speech.speak("Hello Sir, we are online and ready. What can I do for you ?")
+            if self.speech.language == "spanish":
+                self.speech.speak("Hola, estamos en línea y listos. ¿En qué puedo ayudarte?")
+            else:
+                self.speech.speak("Hello Sir, we are online and ready. What can I do for you ?")
         if recover_last_session:
             self.recover_last_session()
     
@@ -58,7 +62,7 @@ class Interaction:
         buffer = ""
 
         PROMPT = "\033[1;35m➤➤➤ \033[0m"
-        while buffer == "" or buffer.isascii() == False:
+        while buffer == "" or buffer.isspace():
             try:
                 buffer = input(PROMPT)
             except EOFError:

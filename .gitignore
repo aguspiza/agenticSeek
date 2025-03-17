@@ -1,6 +1,10 @@
 # do not upload my config.ini file
 config.ini
 
+# ai_workplace
+ai_workplace/
+
+
 *.wav
 config.ini
 *.egg-info

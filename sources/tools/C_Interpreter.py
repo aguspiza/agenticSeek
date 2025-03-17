@@ -51,7 +51,8 @@ class CInterpreter(Tools):
                     run_command,
                     capture_output=True,
                     text=True,
-                    timeout=10
+                    timeout=10,
+                    cwd=self.current_dir
                 )
 
                 if run_result.returncode != 0:

@@ -23,7 +23,7 @@ class BashInterpreter(Tools):
         if so, return True, otherwise return False.
         The philosophy is that code written by the AI will be executed, so it should not use bash to run it.
         """
-        lang_interpreter = ["python3", "gcc", "g++", "go", "javac", "rustc", "clang", "clang++", "rustc", "rustc++", "rustc++"]
+        lang_interpreter = ["python3", "gcc", "g++", "go", "javac", "rustc", "clang", "clang++", "rustc++", "nim"]
         for word in command.split():
             if word in lang_interpreter:
                 return True
@@ -46,7 +46,8 @@ class BashInterpreter(Tools):
                     shell=True,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
-                    universal_newlines=True
+                    universal_newlines=True,
+                    cwd=self.current_dir
                 )
                 command_output = ""
                 for line in process.stdout:

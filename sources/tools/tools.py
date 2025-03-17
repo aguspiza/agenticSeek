@@ -71,7 +71,7 @@ class Tools():
         return dir_path
 
     @abstractmethod
-    def execute(self, blocks:[str], safety:bool) -> str:
+    def execute(self, blocks:list[str], safety:bool) -> str:
         """
         Abstract method that must be implemented by child classes to execute the tool's functionality.
         Args:
@@ -104,7 +104,7 @@ class Tools():
         """
         pass
 
-    def save_block(self, blocks:[str], save_path:str) -> None:
+    def save_block(self, blocks:list[str], save_path:str) -> None:
         """
         Save code or query blocks to a file at the specified path.
         Creates the directory path if it doesn't exist.

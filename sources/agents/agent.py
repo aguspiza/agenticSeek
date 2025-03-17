@@ -80,8 +80,10 @@ class Agent():
         Remove the reasoning block of reasoning model like deepseek.
         """
         end_tag = "</think>"
-        end_idx = text.rfind(end_tag)+8
-        return text[end_idx:]
+        end_idx = text.rfind(end_tag)
+        if end_idx == -1:
+            return text
+        return text[end_idx+len(end_tag):]
     
     def extract_reasoning_text(self, text: str) -> None:
         """
@@ -90,6 +92,8 @@ class Agent():
         start_tag = "<think>"
         end_tag = "</think>"
         start_idx = text.find(start_tag)
+        if start_idx == -1:
+            return ""
         end_idx = text.rfind(end_tag)+8
         return text[start_idx:end_idx]
     
@@ -99,9 +103,11 @@ class Agent():
         """
         memory = self.memory.get()
         thought = self.llm.respond(memory, verbose)
-
+        print("Thought:", thought)
         reasoning = self.extract_reasoning_text(thought)
         answer = self.remove_reasoning_text(thought)
+        print("Answer:", answer)
+        #print("Reasoning:", reasoning)
         self.memory.push('assistant', answer)
         return answer, reasoning
     
@@ -110,8 +116,9 @@ class Agent():
             return
         messages = ["Please be patient, I am working on it.",
                     "Computing... I recommend you have a coffee while I work.",
-                    "Hold on, I’m crunching numbers.",
+                    "Hold on, I'm crunching numbers.",
                     "Working on it, please let me think."]
+        messages = [ "ok!", "yeah!" ]
         speech_module.speak(messages[random.randint(0, len(messages)-1)])
     
     def get_blocks_result(self) -> list:
